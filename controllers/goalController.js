@@ -13,15 +13,15 @@ const addGoals = AsyncHandler(async (req, res) => {
 
   const myGoal = await Goal.create({
     goal,
+    user: req.user.id,
   });
-
   res.status(200).send(myGoal);
 });
 
 // get the goals
 
 const getGoals = AsyncHandler(async (req, res) => {
-  const goals = await Goal.find();
+  const goals = await Goal.find({ user: req.user.id });
 
   res.status(200).send(goals);
 });

@@ -23,7 +23,13 @@ const registerUser = AsyncHandler(async (req, res) => {
       email,
       password: hashedPassword,
     });
-    res.send(newUser);
+    res.send({
+      id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+      password: newUser.password,
+      token: generateToken(newUser._id),
+    });
   }
 });
 
