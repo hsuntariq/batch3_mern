@@ -18,6 +18,7 @@ function App() {
           <Route path="/show-goals" element={<Show />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/update/:id" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { registerUser } from "../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [formFields, setFormFields] = useState({
     name: "",
@@ -8,6 +11,37 @@ const Register = () => {
   });
   // destructure the fields
   const { name, email, password } = formFields;
+
+  // get the state from redux
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+  // initialize dispatch
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isSuccess || user) {
+      navigate("/add-goals");
+    } else {
+      console.log(message);
+      navigate("/register");
+    }
+  }, [isSuccess]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isError) {
+      console.log(message);
+    } else {
+      const userData = {
+        name,
+        email,
+        password,
+      };
+      dispatch(registerUser(userData));
+    }
+  };
+
   const handleChange = (e) => {
     e.preventDefault();
     setFormFields((prevValue) => ({
@@ -44,7 +78,10 @@ const Register = () => {
               value={password}
               onChange={handleChange}></Form.Control>
           </Form.Group>
-          <Button variant="primary" className="my-2 w-100">
+          <Button
+            onClick={handleSubmit}
+            variant="primary"
+            className="my-2 w-100">
             Register
           </Button>
         </Form>
